@@ -1,0 +1,429 @@
+/* styles.css – Light green theme + dark VS Code code area with always-visible line numbers */
+:root {
+  --bg: #edf5ed;
+  --panel: #f6faf6;
+  --panel-alt: #edf5ed;
+  --border: #c8dcc8;
+  --text: #1a2e1a;
+  --muted: #4a6a4a;
+  --muted-2: #7a9a7a;
+  --green: #3a8a5a;
+  --green-bg: #3a8a5a12;
+  --green-bg-2: #3a8a5a1f;
+  --blue: #4a8aaa;
+  --blue-bg: #4a8aaa12;
+  --orange: #b0784a;
+  --orange-bg: #b0784a22;
+  --purple: #8a7aaa;
+  --purple-bg: #8a7aaa12;
+  --red: #b05a5a;
+  --red-bg: #b05a5a12;
+  --yellow: #a0904a;
+  --yellow-bg: #a0904a1f;
+  --radius: 10px;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  --sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* VS Code dark theme colors for code area */
+  --vscode-bg: #1e1e2e;
+  --vscode-panel: #181825;
+  --vscode-border: #313244;
+  --vscode-text: #cdd6f4;
+  --vscode-muted: #6c7086;
+  --vscode-green: #a6e3a1;
+  --vscode-blue: #89b4fa;
+  --vscode-orange: #fab387;
+  --vscode-purple: #cba6f7;
+  --vscode-red: #f38ba8;
+  --vscode-yellow: #f9e2af;
+  --vscode-cyan: #94e2d5;
+  --vscode-pink: #f5c2e7;
+  --vscode-line-highlight: #31324455;
+  --vscode-selection: #585b7055;
+  --vscode-line-number: #6c7086;
+  --vscode-active-line-number: #a6e3a1;
+  --vscode-gutter-border: #313244;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+button { font-family: inherit; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #b8d0b8; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #a0c0a0; }
+
+/* ---------- Header ---------- */
+header {
+  height: 48px; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand .logo {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: linear-gradient(135deg, var(--green), #5aaa7a);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: 13px; font-family: var(--mono);
+}
+.brand h1 { font-size: 14px; font-weight: 800; letter-spacing: -.01em; margin: 0; }
+.brand h1 span { color: var(--green); }
+.divider { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+select#exampleSelect {
+  height: 28px; font-size: 12px; border: 1px solid var(--border); border-radius: 7px;
+  background: var(--panel); color: var(--text); padding: 0 8px; max-width: 220px;
+}
+.header-right { display: flex; align-items: center; gap: 8px; }
+.hint { font-size: 11px; color: var(--muted-2); display: none; }
+@media (min-width: 700px) { .hint { display: inline; } }
+.icon-btn {
+  width: 26px; height: 26px; border-radius: 7px; border: 1px solid transparent; background: transparent;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted);
+}
+.icon-btn:hover { background: var(--panel-alt); color: var(--text); border-color: var(--border); }
+
+/* ---------- Layout ---------- */
+main { flex: 1; min-height: 0; display: flex; }
+.col-left {
+  flex: 1 1 56%; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border);
+}
+.col-right {
+  flex: 1 1 44%; min-width: 0; display: flex; flex-direction: column; overflow: hidden; background: var(--panel-alt);
+}
+
+/* ---------- Code area – VS Code Dark Theme with always-visible line numbers ---------- */
+.code-wrap {
+  flex: 1 1 55%; min-height: 0; position: relative;
+  background: var(--vscode-bg);
+  overflow: hidden;
+}
+
+.editor-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  background: var(--vscode-bg);
+  overflow: hidden;
+}
+.editor-wrap.hidden { display: none; }
+
+/* Line numbers gutter - always visible, in sync with editor scroll */
+.code-gutter {
+  flex: 0 0 auto;
+  width: 46px;
+  padding: 12px 0;
+  background: var(--vscode-panel);
+  border-right: 1px solid var(--vscode-gutter-border);
+  overflow: hidden;
+  user-select: none;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: right;
+  color: var(--vscode-line-number);
+  pointer-events: none;
+}
+
+.code-gutter .gutter-line {
+  padding: 0 10px 0 0;
+  height: 20.8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 12px;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.code-gutter .gutter-line.active-line {
+  color: var(--vscode-active-line-number);
+  font-weight: 700;
+}
+
+/* Code content area next to the gutter */
+.code-content {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: auto;
+  background: var(--vscode-bg);
+}
+
+pre#codeHighlight {
+  position: absolute; inset: 0; margin: 0; padding: 12px 14px;
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  color: var(--vscode-text);
+  white-space: pre-wrap; word-wrap: break-word; overflow: hidden; pointer-events: none;
+  tab-size: 4; box-sizing: border-box;
+  background: transparent;
+  min-height: 100%;
+}
+pre#codeHighlight code { font: inherit; }
+
+textarea#codeInput {
+  position: absolute; inset: 0; width: 100%; height: 100%; resize: none; border: 0; outline: none;
+  padding: 12px 14px;
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  color: transparent; caret-color: var(--vscode-text);
+  background: transparent; tab-size: 4; white-space: pre-wrap; word-wrap: break-word;
+  box-sizing: border-box; z-index: 1;
+  min-height: 100%;
+}
+textarea#codeInput::selection {
+  background: var(--vscode-selection);
+}
+textarea#codeInput::-moz-selection {
+  background: var(--vscode-selection);
+}
+
+#codeView {
+  width: 100%; height: 100%; overflow: auto;
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  background: var(--vscode-bg); display: none;
+  color: var(--vscode-text);
+}
+#codeView.active { display: block; }
+
+.code-line {
+  display: flex; padding: 0 14px; white-space: pre;
+  background: var(--vscode-bg);
+  min-height: 20.8px;
+}
+.code-line .ln {
+  width: 36px; flex: 0 0 36px; text-align: right; padding-right: 10px;
+  color: var(--vscode-muted); user-select: none; font-size: 12px;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+.code-line .src { flex: 1; color: var(--vscode-text); }
+.code-line.current-line {
+  background: var(--vscode-line-highlight);
+  border-left: 3px solid var(--vscode-green);
+}
+.code-line.current-line .ln { color: var(--vscode-green); font-weight: 700; }
+.code-line.next-line {
+  background: #89b4fa22;
+  border-left: 3px solid var(--vscode-blue);
+}
+
+/* VS Code syntax highlighting colors */
+.kw { color: var(--vscode-purple); font-weight: 600; }
+.ty { color: var(--vscode-blue); }
+.str { color: var(--vscode-green); }
+.num { color: var(--vscode-orange); }
+.cm { color: var(--vscode-muted); font-style: italic; }
+.fn { color: var(--vscode-yellow); }
+.va { color: var(--vscode-pink); }
+.op { color: var(--vscode-cyan); }
+.pp { color: var(--vscode-red); }
+
+/* ---------- Controls ---------- */
+.controls {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+  border-top: 1px solid var(--border); background: var(--panel);
+  flex-wrap: wrap;
+}
+.controls .sep { width: 1px; height: 22px; background: var(--border); }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px;
+  border-radius: 7px; border: 1px solid var(--border); background: var(--panel);
+  font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer;
+}
+.btn:hover { background: var(--panel-alt); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn.icon-only { width: 30px; padding: 0; justify-content: center; }
+.btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
+.btn.primary:hover { background: #2a7a4a; }
+select#speedSelect { height: 30px; border-radius: 7px; border: 1px solid var(--border); background: var(--panel); font-size: 12px; padding: 0 6px; }
+#stepLabel { font-size: 11px; color: var(--muted); font-family: var(--mono); white-space: nowrap; }
+input#stepSlider { flex: 1; min-width: 60px; accent-color: var(--green); }
+
+/* ---------- IO panels ---------- */
+.io-wrap { flex: 0 0 30%; display: flex; border-top: 1px solid var(--border); min-height: 110px; }
+.io-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.io-panel + .io-panel { border-left: 1px solid var(--border); }
+.io-title {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+  padding: 6px 10px; border-bottom: 1px solid var(--border); background: var(--panel-alt);
+}
+textarea#stdinInput {
+  flex: 1; border: 0; outline: none; resize: none; padding: 8px 10px; font-family: var(--mono);
+  font-size: 12.5px; background: var(--panel); color: var(--text);
+}
+#outputView {
+  flex: 1; overflow: auto; padding: 8px 10px; font-family: var(--mono); font-size: 12.5px;
+  white-space: pre-wrap; background: var(--panel); color: var(--text);
+}
+#outputView .placeholder { color: var(--muted-2); font-style: italic; }
+.error-banner {
+  background: var(--red-bg); color: var(--red); border-top: 1px solid #b05a5a33;
+  font-family: var(--mono); font-size: 12px; padding: 8px 12px; display: none;
+}
+.error-banner.show { display: block; }
+
+/* ---------- Right panel ---------- */
+.right-scroll { flex: 1; overflow: auto; padding: 14px; }
+.empty-state {
+  height: 100%; display: flex; align-items: center; justify-content: center; text-align: center;
+  color: var(--muted-2); flex-direction: column; gap: 8px;
+}
+.empty-state svg { opacity: .4; }
+.section { margin-bottom: 16px; }
+.section-title {
+  display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--muted); margin-bottom: 8px;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot.green { background: var(--green); }
+.dot.blue { background: var(--blue); }
+.dot.orange { background: var(--orange); }
+
+.frame-card {
+  border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel); margin-bottom: 10px; overflow: hidden;
+}
+.frame-card.top { border-color: #3a8a5a55; box-shadow: 0 0 0 1px #3a8a5a22; }
+.frame-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 10px;
+  background: var(--green-bg); border-bottom: 1px solid var(--border); font-family: var(--mono);
+  font-size: 12.5px; font-weight: 700; color: var(--green);
+}
+.frame-head .fname { display: flex; align-items: center; gap: 6px; }
+.pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+table.vars { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+table.vars td { padding: 5px 10px; border-top: 1px solid var(--border); vertical-align: top; }
+table.vars tr:first-child td { border-top: none; }
+.vname { color: var(--blue); font-weight: 600; }
+.vname.ptr { color: var(--orange); }
+.vtype { color: var(--muted-2); font-size: 11px; }
+.vval { font-weight: 700; text-align: right; transition: background .3s; }
+.vval.changed { background: var(--yellow-bg); border-radius: 4px; }
+.novars { padding: 10px; color: var(--muted-2); font-size: 12px; font-style: italic; }
+
+.array-block { margin-bottom: 12px; }
+.array-label { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-bottom: 5px; }
+.array-label b { color: var(--blue); }
+.array-cells { display: flex; flex-wrap: wrap; gap: 4px; }
+.cell { display: flex; flex-direction: column; align-items: center; }
+.cell .box {
+  width: 38px; height: 32px; border: 1px solid var(--border); border-radius: 6px; background: var(--blue-bg);
+  display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12.5px; font-weight: 700;
+  transition: background .3s, border-color .3s;
+}
+.cell.changed .box { background: var(--yellow-bg); border-color: #a0904a88; }
+.cell.swap-cell .box { background: var(--purple-bg); border-color: #8a7aaa88; }
+.cell .idx { font-size: 9.5px; color: var(--muted-2); margin-top: 2px; }
+.array-block { position: relative; }
+.array-block.has-swap-arrow { margin-top: 26px; }
+.swap-arrow-layer { position: absolute; left: 0; top: -24px; overflow: visible; pointer-events: none; }
+.swap-arrow-layer .swap-arc { fill: none; stroke: var(--purple); stroke-width: 2; stroke-linecap: round;
+  stroke-dasharray: 4 3; animation: swapArcFlow .5s linear infinite; }
+.swap-arrow-layer .swap-arrowhead { fill: var(--purple); }
+@keyframes swapArcFlow { from { stroke-dashoffset: 14; } to { stroke-dashoffset: 0; } }
+@keyframes swapPulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(138,122,170,.45); }
+  40% { transform: scale(1.14); box-shadow: 0 0 0 5px rgba(138,122,170,.22); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(138,122,170,0); }
+}
+.cell .box.swap-pulse { animation: swapPulse .6s ease; }
+
+.output-line { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: pre-wrap; padding: 6px 10px; border-top: 1px dashed var(--border); }
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed; inset: 0; background: #00000055; display: none; align-items: center; justify-content: center; z-index: 50;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  width: 100%; max-width: 520px; max-height: 80vh; overflow: auto; background: var(--panel);
+  border-radius: 14px; border: 1px solid var(--border); padding: 20px 22px; box-shadow: 0 20px 50px #00000022;
+}
+.modal h2 { font-size: 15px; margin: 0 0 14px; }
+.modal h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; margin: 16px 0 8px; display: flex; align-items: center; gap: 6px; }
+.modal ul { margin: 0; padding-left: 0; list-style: none; }
+.modal li { display: flex; gap: 8px; font-size: 13px; padding: 3px 0; color: #333; }
+.modal li:before { content: ""; width: 6px; height: 6px; border-radius: 50%; margin-top: 6px; flex: 0 0 auto; background: currentColor; }
+.modal .close-x {
+  position: absolute; top: 14px; right: 14px; border: none; background: transparent; cursor: pointer; color: var(--muted);
+  width: 26px; height: 26px; border-radius: 7px;
+}
+.modal .close-x:hover { background: var(--panel-alt); }
+.modal-wrap { position: relative; }
+
+/* ---------- Mobile / Responsive ---------- */
+@media (max-width: 860px) {
+  main { flex-direction: column; overflow: auto; }
+  .col-left, .col-right { flex: none; border-right: none; }
+  .col-left { height: 60vh; }
+  .col-right { height: 60vh; }
+  .controls { gap: 4px; padding: 6px 8px; }
+  .btn { height: 28px; font-size: 11px; padding: 0 8px; }
+  .btn.icon-only { width: 28px; }
+  .brand h1 { font-size: 13px; }
+  select#exampleSelect { max-width: 140px; font-size: 11px; }
+  .header-right .hint { display: none; }
+  .io-wrap { min-height: 90px; flex-direction: column; }
+  .io-panel + .io-panel { border-left: none; border-top: 1px solid var(--border); }
+  .right-scroll { padding: 10px; }
+  .code-gutter { width: 36px; }
+  .code-gutter .gutter-line { font-size: 11px; height: 17.6px; padding: 0 8px 0 0; }
+}
+
+/* ---------- Struct values in variable table ---------- */
+.vval.struct-val { font-weight: 600; text-align: right; font-size: 11px; color: var(--purple); white-space: nowrap; }
+.vval.heap-val { color: var(--orange); }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 18px;
+  padding: 9px 16px; border-top: 1px solid var(--border); background: var(--panel);
+  font-size: 12px; color: var(--muted); flex-wrap: wrap; font-family: var(--sans);
+}
+.site-footer a { color: var(--green); text-decoration: none; font-weight: 700; }
+.site-footer a:hover { text-decoration: underline; }
+.site-footer .heart { color: var(--red); }
+.site-footer .gh-link { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 600; }
+.site-footer .gh-link:hover { color: var(--text); }
+
+@media (max-width: 480px) {
+  .site-footer { font-size: 10.5px; padding: 7px 10px; gap: 10px; }
+}
+
+@media (max-width: 480px) {
+  header { flex-wrap: wrap; height: auto; padding: 6px 10px; gap: 4px; }
+  .brand { gap: 6px; }
+  .brand .logo { width: 22px; height: 22px; font-size: 11px; }
+  .brand h1 { font-size: 12px; }
+  .divider { display: none; }
+  select#exampleSelect { max-width: 100px; font-size: 10px; height: 24px; }
+  .header-right { gap: 4px; }
+  .icon-btn { width: 22px; height: 22px; }
+  .col-left { height: 50vh; }
+  .col-right { height: 50vh; }
+  .controls { gap: 3px; padding: 4px 6px; }
+  .btn { height: 24px; font-size: 10px; padding: 0 6px; }
+  .btn.icon-only { width: 24px; }
+  input#stepSlider { min-width: 40px; }
+  #stepLabel { font-size: 10px; }
+  select#speedSelect { height: 24px; font-size: 10px; }
+  .frame-head { font-size: 11px; padding: 5px 8px; }
+  table.vars td { padding: 4px 6px; font-size: 11px; }
+  .cell .box { width: 30px; height: 26px; font-size: 11px; }
+  .array-label { font-size: 10px; }
+  .code-line { font-size: 12px; padding: 0 8px; }
+  .code-line .ln { width: 28px; flex: 0 0 28px; padding-right: 6px; font-size: 10px; }
+  textarea#codeInput, pre#codeHighlight { font-size: 12px; padding: 8px 10px; }
+  .modal { padding: 14px 16px; max-width: 96%; }
+  .code-gutter { width: 28px; }
+  .code-gutter .gutter-line { font-size: 10px; height: 16px; padding: 0 6px 0 0; }
+}

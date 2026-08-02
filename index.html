@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>C Code Visualizer</title>
+<meta name="description" content="Interactive C code visualizer for learning algorithms and data structures — including structs, pointers, dynamic memory (malloc/calloc/realloc), and file handling. Step through execution, view the call stack, variables and arrays in real time." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">C</div>
+    <h1><span>Code Visualizer</span></h1>
+    <div class="divider"></div>
+    <select id="exampleSelect" title="Load an example program"></select>
+  </div>
+  <div class="header-right">
+   
+     <button disabled class="icon-btn" id="helpBtn" title="Help / supported features" aria-label="Help">
+     
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="col-left">
+    <div class="code-wrap">
+      <div class="editor-wrap" id="editorWrap">
+        <div class="code-gutter" id="codeGutter" aria-hidden="true"></div>
+        <div class="code-content" id="codeContent">
+          <pre id="codeHighlight" aria-hidden="true"><code id="codeHighlightCode"></code></pre>
+          <textarea id="codeInput" spellcheck="false"></textarea>
+        </div>
+      </div>
+      <div id="codeView"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn primary" id="runBtn">▶ Run</button>
+      <div class="sep"></div>
+      <button class="btn icon-only" id="stepBackBtn" title="Step backward">⏮</button>
+      <button class="btn icon-only" id="playBtn" title="Play">▶</button>
+      <button class="btn icon-only" id="stepFwdBtn" title="Step forward">⏭</button>
+      <button class="btn icon-only" id="resetBtn" title="Reset">↺</button>
+      <select id="speedSelect">
+        <option value="500">1x</option>
+        <option value="250">2x</option>
+        <option value="100">5x</option>
+        <option value="25">20x</option>
+      </select>
+      <div class="sep"></div>
+      <span id="stepLabel">0 / 0</span>
+      <input type="range" id="stepSlider" min="0" max="0" value="0" />
+    </div>
+
+    <div class="io-wrap">
+      <div class="io-panel">
+        <div class="io-title">stdin</div>
+        <textarea id="stdinInput" placeholder="Enter input for scanf()..."></textarea>
+      </div>
+      <div class="io-panel">
+        <div class="io-title">output</div>
+        <div id="outputView"><span class="placeholder">No output yet</span></div>
+      </div>
+    </div>
+    <div class="error-banner" id="errorBanner"></div>
+  </section>
+
+  <section class="col-right">
+    <div class="right-scroll" id="rightScroll">
+      <div class="empty-state" id="emptyState">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <div><strong style="color:var(--muted)">No execution yet</strong></div>
+        <div style="font-size:12px;">Click <span style="color:var(--green);font-weight:700;">Run</span> to start visualizing</div>
+      </div>
+      <div id="vizContent" style="display:none;">
+        <div class="section" id="callStackSection">
+          <div class="section-title"><span class="dot green"></span>Call Stack</div>
+          <div id="callStackBody"></div>
+        </div>
+        <div class="section" id="arraysSection">
+          <div class="section-title"><span class="dot blue"></span>Arrays</div>
+          <div id="arraysBody"></div>
+        </div>
+        <div class="section" id="globalsSection">
+          <div class="section-title"><span class="dot orange"></span>Global Variables</div>
+          <div id="globalsBody"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="helpOverlay">
+  <div class="modal modal-wrap">
+    <button class="close-x" id="helpClose">✕</button>
+    <h2>C Visualizer — What's supported?</h2>
+    <h3 style="color:var(--green);">✓ Supported features</h3>
+    <ul id="featuresList" style="color:var(--green);"></ul>
+    <h3 style="color:var(--red);">✗ Current limitations</h3>
+    <ul id="limitationsList" style="color:var(--red);"></ul>
+    <h3 style="color:var(--yellow);">Tips</h3>
+    <ul id="tipsList" style="color:#92650a;"></ul>
+  </div>
+</div>
+<footer class="site-footer">
+  <span>Built with <span class="heart"> ♥ </span> by <a href="https://www.grameenphone.academy/public-profile/GP153876" target="_blank" rel="noopener noreferrer">Md. Anisur Rahman</a></span>
+  <a class="gh-link" href="#" target="_blank" rel="noopener noreferrer" title="View source on GitHub">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+    GitHub Repository
+  </a>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
